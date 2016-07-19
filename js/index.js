@@ -3,12 +3,13 @@ var swiper = new Swiper('.swiper-container', {
     pagination: '.swiper-pagination',
     nextButton: '.swiper-button-next',
     prevButton: '.swiper-button-prev',
-    slidesPerView: 1,
     paginationClickable: true,
-    spaceBetween: 30,
-    loop: true
-})
-
+    spaceBetween: 0,
+    centeredSlides: true,
+    autoplay: 2500,
+    autoplayDisableOnInteraction: false
+});
+//倒计时
 function getTimeCha(now,future){
 	var arrTime=[];
 	var sum=(future.getTime()-now.getTime())/1000    //总的秒数差
@@ -25,7 +26,7 @@ function getTimeCha(now,future){
 
 var span=document.querySelectorAll('.center span');
 function move(){
-	var future=new Date("12:00:00 7/15/2016");
+	var future=new Date("12:00:00 8/15/2016");
 	var now=new Date();
 	var arrTime=getTimeCha(now,future);
 	for(var i=0;i<span.length;i++){
@@ -35,7 +36,18 @@ function move(){
 		span[i].innerHTML=arrTime[i];
 	}
 }
-setInterval(move,1)
-
-
-console.log(span)
+setInterval(move,1000)
+//按需加载
+var h=document.documentElement.clientHeight;
+var picload=$(".picload");
+$(window).scrollTop(1);
+$(window).scroll(function(){
+	var tops=$(window).scrollTop();
+	picload.each(function(i,obj){
+		if($(obj).offset().top<(tops+h)){
+			$("img",obj).each(function(j,o){
+				$(o).attr("src",$(o).attr("data-src"))
+			})
+		}
+	})
+})
